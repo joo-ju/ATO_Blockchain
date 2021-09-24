@@ -9,7 +9,7 @@ docker exec cli peer chaincode instantiate -o orderer.ato.com:7050 -C channelsel
 sleep 10
 # invoke chaincode for channelseller
 docker exec cli peer chaincode invoke -o orderer.ato.com:7050 -C channelseller -n atocc -c '{"function":"initWallet","Args":[""]}'
-docker exec cli peer chaincode invoke -o orderer.ato.com:7050 -C channelseller -n atocc -c '{"function":"setGoods","Args":["Fabric", "Hyper", "20", "1Q2W3E4R"]}'
+docker exec cli peer chaincode invoke -o orderer.ato.com:7050 -C channelseller -n atocc -c '{"function":"setGoods","Args":["제목", "내용", "20", "카테고리", "1Q2W3E4R"]}'
 sleep 3
 # query chaincode for channelseller
 docker exec cli peer chaincode query -o orderer.ato.com:7050 -C channelseller -n atocc -c '{"function":"getAllGoods","Args":[""]}'
