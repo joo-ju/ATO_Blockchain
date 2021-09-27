@@ -5,13 +5,13 @@ OrdererOrgs:
       - Hostname: orderer
 
 PeerOrgs:
-  - Name: seller
+  - Name: Seller
     Domain: seller.ato.com
     Template:
       Count: 2
     Users:
       Count: 1
-  - Name: buyer
+  - Name: Buyer
     Domain: buyer.ato.com
     Template:
       Count: 2

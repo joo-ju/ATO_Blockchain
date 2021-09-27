@@ -1,7 +1,7 @@
 {
     "name": "fabric-ato",
     "version": "1.0.0",
-    "description": "Hyperledger Fabric ATO Application",
+    "description": "Hyperledger Fabric ato  Application",
     "main": "server.js",
     "dependencies": {
         "fabric-ca-client": "^1.4.0",
@@ -17,7 +17,8 @@
     "keywords": [
         "Hyperledger",
         "Fabric",
-        "ATO",
+        "ato",
+        "Goods",
         "Application"
     ]
 }

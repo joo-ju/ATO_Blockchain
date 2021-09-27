@@ -24,7 +24,7 @@
     },
     "organizations": {
         "Seller": {
-            "mspid": "Seller1Org",
+            "mspid": "SellerOrg",
             "peers": [
                 "peer0.seller.ato.com"
             ],
@@ -32,7 +32,7 @@
                 "ca.seller.ato.com"
             ],
             "adminPrivateKey": {
-                "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/keystore/617488586ba10de4915c06065cf81e651a727d17711894f1a83c18d3e80bd1b3_sk"
+                "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/keystore/6ccd08f6a81ed53dbb3e2c0c8d5d2a203f4dc04c5974102db5be038235291b49_sk"
             },
             "signedCert":{
                 "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/signcerts/Admin@seller.ato.com-cert.pem"
