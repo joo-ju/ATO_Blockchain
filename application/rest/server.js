@@ -4,7 +4,7 @@ const app = express();
 var path = require("path");
 var sdk = require("./sdk");
 
-const PORT = 8080;
+const PORT = 3001;
 const HOST = "localhost";
 
 app.get("/api/getWallet", function (req, res) {
@@ -14,25 +14,26 @@ app.get("/api/getWallet", function (req, res) {
 
   sdk.send(false, "getWallet", args, res);
 });
-app.get("/api/setMusic", function (req, res) {
+app.get("/api/setGoods", function (req, res) {
   var title = req.query.title;
-  var singer = req.query.singer;
+  var content = req.query.content;
   var price = req.query.price;
+  var category = req.query.category;
   var walletid = req.query.walletid;
 
-  let args = [title, singer, price, walletid];
-  sdk.send(true, "setMusic", args, res);
+  let args = [title, content, price, category, walletid];
+  sdk.send(true, "setGoods", args, res);
 });
-app.get("/api/getAllmusic", function (req, res) {
+app.get("/api/getAllgoods", function (req, res) {
   let args = [];
-  sdk.send(false, "getAllMusic", args, res);
+  sdk.send(false, "getAllGoods", args, res);
 });
-app.get("/api/purchaseMusic", function (req, res) {
+app.get("/api/purchaseGoods", function (req, res) {
   var walletid = req.query.walletid;
-  var key = req.query.musickey;
+  var key = req.query.goodskey;
 
   let args = [walletid, key];
-  sdk.send(true, "purchaseMusic", args, res);
+  sdk.send(true, "purchaseGoods", args, res);
 });
 app.use(express.static(path.join(__dirname, "./client")));
 
