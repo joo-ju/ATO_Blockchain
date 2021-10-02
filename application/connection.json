@@ -1,0 +1,83 @@
+{
+    "name": "basic-network",
+    "version": "1.0.0",
+    "client": {
+        "organization": "Seller",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                },
+                "orderer": "300"
+            }
+        }
+    },
+    "channels": {
+        "channelseller": {
+            "orderers": [
+                "orderer.ato.com"
+            ],
+            "peers": {
+                "peer0.seller.ato.com": {}
+            }
+        }
+    },
+    "organizations": {
+        "Seller": {
+            "mspid": "SellerOrg",
+            "peers": [
+                "peer0.seller.ato.com"
+            ],
+            "certificateAuthorities": [
+                "ca.seller.ato.com"
+            ],
+            "adminPrivateKey": {
+                "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/keystore/6ccd08f6a81ed53dbb3e2c0c8d5d2a203f4dc04c5974102db5be038235291b49_sk"
+            },
+            "signedCert":{
+                "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/signcerts/Admin@seller.ato.com-cert.pem"
+            }
+        }
+    },
+    "orderers": {
+        "orderer.ato.com": {
+            "url": "grpc://localhost:7050",
+            "grpcOptions":{
+                "ssl-target-name-override":"orderer.ato.com",
+                "grpc-max-send-message-length": -1
+            },
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/ordererOrganizations/ato.com/orderers/orderer.ato.com/msp/tlscacerts/tlsca.ato.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.seller.ato.com": {
+            "url": "grpc://localhost:7051",
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/peerOrganizations/seller.ato.com/peers/peer0.seller.ato.com/msp/tlscacerts/tlsca.seller.ato.com-cert.pem"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.seller.ato.com",
+                "hostnameOverride": "peer1.seller.ato.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.seller.ato.com": {
+            "url": "http://localhost:7054",
+            "caName": "ca.seller.ato.com",
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/peerOrganizations/seller.ato.com/ca/ca.seller.ato.com-cert.pem"
+            },
+            "registrar":{
+                "enrollId": "admin",
+                "enrollSecret": "adminpw",
+                "caName": "caseller"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}
