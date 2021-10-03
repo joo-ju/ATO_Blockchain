@@ -21,9 +21,10 @@ Organizations:
         Port: 7051
 
 Orderer: &OrdererDefaults
-  OrdererType: solo
+  OrdererType: kafka
   Addresses:
-    - orderer.ato.com:7050
+    - orderer1.ato.com:7050
+    - orderer2.ato.com:7050
   BatchTimeout: 2s
   BatchSize:
     MaxMessageCount: 10
@@ -31,7 +32,11 @@ Orderer: &OrdererDefaults
     PreferredMaxBytes: 512 KB
   Kafka:
     Brokers:
-      - 127.0.0.1:9092
+      - kafka1.ato.com:9092
+      - kafka2.ato.com:9092
+      - kafka3.ato.com:9092
+      - kafka4.ato.com:9092
+
   Organizations:
 
 Application: &ApplicationDefaults

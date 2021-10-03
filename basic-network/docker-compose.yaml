@@ -1,11 +1,9 @@
 version: '2'
-
 networks:
   ato:
-
 services:
-  orderer.ato.com:
-    container_name: orderer.ato.com
+  orderer1.ato.com:
+    container_name: orderer1.ato.com
     image: hyperledger/fabric-orderer:1.4.3
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
@@ -20,7 +18,139 @@ services:
       - 7050:7050
     volumes:
         - ./config/:/etc/hyperledger/configtx
-        - ./crypto-config/ordererOrganizations/ato.com/orderers/orderer.ato.com/:/etc/hyperledger/msp/orderer
+        - ./crypto-config/ordererOrganizations/ato.com/orderers/orderer1.ato.com/:/etc/hyperledger/msp/orderer
+    depends_on:
+      - kafka1.ato.com
+      - kafka2.ato.com
+      - kafka3.ato.com
+      - kafka4.ato.com  
+    networks:
+      - ato
+  orderer2.ato.com:
+    container_name: orderer2.ato.com
+    image: hyperledger/fabric-orderer:1.4.3
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererOrg
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+    command: orderer
+    ports:
+      - 8050:7050
+    volumes:
+        - ./config/:/etc/hyperledger/configtx
+        - ./crypto-config/ordererOrganizations/ato.com/orderers/orderer2.ato.com/:/etc/hyperledger/msp/orderer
+    depends_on:
+      - kafka1.ato.com
+      - kafka2.ato.com
+      - kafka3.ato.com
+      - kafka4.ato.com  
+    networks:
+      - ato
+  kafka1.ato.com:
+    container_name: kafka1.ato.com
+    extends:
+      file: ./base/kafka-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=1
+    ports:
+      - 9092:9092
+      - 9093:9093
+    depends_on:
+      - zookeeper1.ato.com
+      - zookeeper2.ato.com
+      - zookeeper3.ato.com
+    networks:
+      - ato
+  kafka2.ato.com:
+    container_name: kafka2.ato.com
+    extends:
+      file: ./base/kafka-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=2
+    ports:
+      - 10092:9092
+      - 10093:9093
+    depends_on:
+      - zookeeper1.ato.com
+      - zookeeper2.ato.com
+      - zookeeper3.ato.com
+    networks:
+      - ato
+  kafka3.ato.com:
+    container_name: kafka3.ato.com
+    extends:
+      file: ./base/kafka-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=3
+    ports:
+      - 11092:9092
+      - 11093:9093
+    depends_on:
+      - zookeeper1.ato.com
+      - zookeeper2.ato.com
+      - zookeeper3.ato.com
+    networks:
+      - ato
+  kafka4.ato.com:
+    container_name: kafka4.ato.com
+    extends:
+      file: ./base/kafka-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=4
+    ports:
+      - 12092:9092
+      - 12093:9093
+    depends_on:
+      - zookeeper1.ato.com
+      - zookeeper2.ato.com
+      - zookeeper3.ato.com
+    networks:
+      - ato
+  zookeeper1.ato.com:
+    container_name: zookeeper1.ato.com
+    extends:
+      file: ./base/kafka-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=1
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    networks:
+      - ato
+  zookeeper2.ato.com:
+    container_name: zookeeper2.ato.com
+    extends:
+      file: ./base/kafka-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=2
+    ports:
+      - 12181:2181
+      - 12888:2888
+      - 13888:3888
+    networks:
+      - ato
+  zookeeper3.ato.com:
+    container_name: zookeeper3.ato.com
+    extends:
+      file: ./base/kafka-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=3
+    ports:
+      - 22181:2181
+      - 22888:2888
+      - 25888:3888
     networks:
       - ato
   peer0.seller.ato.com:
@@ -38,6 +168,10 @@ services:
       - CORE_PEER_GOSSIP_ENDPOINT=peer0.seller.ato.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.seller.ato.com:7051
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=net_ato
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -49,7 +183,19 @@ services:
         - ./crypto-config/peerOrganizations/seller.ato.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
     depends_on:
-      - orderer.ato.com
+      - orderer1.ato.com
+      - orderer2.ato.com
+      - couchdb1
+    networks:
+      - ato
+  couchdb1:
+    container_name: couchdb1
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 5984:5984
     networks:
       - ato
   peer1.seller.ato.com:
@@ -64,6 +210,10 @@ services:
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
       - CORE_PEER_ADDRESS=peer1.seller.ato.com:7051
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=net_ato
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -75,7 +225,19 @@ services:
         - ./crypto-config/peerOrganizations/seller.ato.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
     depends_on:
-      - orderer.ato.com
+      - orderer1.ato.com
+      - orderer2.ato.com
+      - couchdb2
+    networks:
+      - ato
+  couchdb2:
+    container_name: couchdb2
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 6984:5984
     networks:
       - ato
   peer0.buyer.ato.com:
@@ -90,6 +252,10 @@ services:
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
       - CORE_PEER_ADDRESS=peer0.buyer.ato.com:7051
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=net_ato
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -101,7 +267,19 @@ services:
         - ./crypto-config/peerOrganizations/buyer.ato.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
     depends_on:
-      - orderer.ato.com
+      - orderer1.ato.com
+      - orderer2.ato.com
+      - couchdb3
+    networks:
+      - ato
+  couchdb3:
+    container_name: couchdb3
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 7984:5984
     networks:
       - ato
   peer1.buyer.ato.com:
@@ -116,6 +294,10 @@ services:
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
       - CORE_PEER_ADDRESS=peer1.buyer.ato.com:7051
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=net_ato
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb4:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -127,12 +309,24 @@ services:
         - ./crypto-config/peerOrganizations/buyer.ato.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
     depends_on:
-      - orderer.ato.com
+      - orderer1.ato.com
+      - orderer2.ato.com
+      - couchdb4
+    networks:
+      - ato
+  couchdb4:
+    container_name: couchdb4
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 8984:5984
     networks:
       - ato
   cli:
     container_name: cli
-    image: hyperledger/fabric-tools
+    image: hyperledger/fabric-tools:1.4.3
     tty: true
     environment:
       - GOPATH=/opt/gopath
@@ -151,4 +345,4 @@ services:
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./config:/etc/hyperledger/configtx
     networks:
-        - ato
+      - ato

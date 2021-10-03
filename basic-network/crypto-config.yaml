@@ -2,7 +2,8 @@ OrdererOrgs:
   - Name: Orderer
     Domain: ato.com
     Specs:
-      - Hostname: orderer
+      - Hostname: orderer1
+      - Hostname: orderer2
 
 PeerOrgs:
   - Name: Seller
