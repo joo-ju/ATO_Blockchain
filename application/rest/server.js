@@ -16,15 +16,17 @@ app.get("/api/getWallet", function (req, res) {
 });
 app.get("/api/setGoods", function (req, res) {
   var title = req.query.title;
+  var state = req.query.state;
+  var seller = req.query.seller;
   var content = req.query.content;
   var price = req.query.price;
   var category = req.query.category;
   var walletid = req.query.walletid;
 
-  let args = [title, content, price, category, walletid];
+  let args = [title, state, seller, category, price, content, walletid];
   sdk.send(true, "setGoods", args, res);
 });
-app.get("/api/getAllgoods", function (req, res) {
+app.get("/api/getAllGoods", function (req, res) {
   let args = [];
   sdk.send(false, "getAllGoods", args, res);
 });
