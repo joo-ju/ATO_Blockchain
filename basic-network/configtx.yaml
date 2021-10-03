@@ -1,5 +1,4 @@
 Organizations:
-
   - &OrdererOrg
     Name: OrdererOrg
     ID: OrdererOrg
@@ -22,15 +21,14 @@ Organizations:
         Port: 7051
 
 Orderer: &OrdererDefaults
-
   OrdererType: solo
   Addresses:
     - orderer.ato.com:7050
   BatchTimeout: 2s
   BatchSize:
-      MaxMessageCount: 10
-      AbsoluteMaxBytes: 99 MB
-      PreferredMaxBytes: 512 KB
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
   Kafka:
     Brokers:
       - 127.0.0.1:9092
@@ -40,7 +38,6 @@ Application: &ApplicationDefaults
   Organizations:
 
 Profiles:
-
   OrdererGenesis:
     Orderer:
       <<: *OrdererDefaults
@@ -51,7 +48,6 @@ Profiles:
         Organizations:
           - *SellerOrg
           - *BuyerOrg
-
   Channel1:
     Consortium: SampleConsortium
     Application:

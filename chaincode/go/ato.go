@@ -137,25 +137,24 @@ func (s *SmartContract) getWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 }
 
-// 새로운 상품를 등록할 떄 고유번호를 만드는 함수
 func generateGoodsKey(APIstub shim.ChaincodeStubInterface, key string) []byte {
 
 	var isFirst bool = false
 
-	GoodskeyAsBytes, err := APIstub.GetState(key)
+	goodskeyAsBytes, err := APIstub.GetState(key)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
 	goodskey := GoodsKey{}
-	json.Unmarshal(GoodskeyAsBytes, &goodskey)
+	json.Unmarshal(goodskeyAsBytes, &goodskey)
 	var tempIdx string
 	tempIdx = strconv.Itoa(goodskey.Idx)
 	fmt.Println(goodskey)
 	fmt.Println("Key is " + strconv.Itoa(len(goodskey.Key)))
 	if len(goodskey.Key) == 0 || goodskey.Key == "" {
 		isFirst = true
-		goodskey.Key = "GS"
+		goodskey.Key = "GD"
 	}
 	if !isFirst {
 		goodskey.Idx = goodskey.Idx + 1
@@ -168,7 +167,6 @@ func generateGoodsKey(APIstub shim.ChaincodeStubInterface, key string) []byte {
 	return returnValueBytes
 }
 
-// 새로운 행사를 등록할 떄 고유번호를 만드는 함수
 func generateEventKey(APIstub shim.ChaincodeStubInterface, key string) []byte {
 
 	var isFirst bool = false
@@ -199,12 +197,11 @@ func generateEventKey(APIstub shim.ChaincodeStubInterface, key string) []byte {
 	return returnValueBytes
 }
 
-// 상품을 새로 추가하는 함수
 func (s *SmartContract) setGoods(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
-	}
 
+	if len(args) != 7 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
+	}
 	var goodskey = GoodsKey{}
 	json.Unmarshal(generateGoodsKey(APIstub, "latestKey"), &goodskey)
 	keyidx := strconv.Itoa(goodskey.Idx)
@@ -218,7 +215,7 @@ func (s *SmartContract) setGoods(APIstub shim.ChaincodeStubInterface, args []str
 
 	err := APIstub.PutState(keyString, goodsAsJSONBytes)
 	if err != nil {
-		return shim.Error(fmt.Sprintf("Failed to record Goods catch: %s", goodskey))
+		return shim.Error(fmt.Sprintf("Failed to record goods catch: %s", goodskey))
 	}
 
 	goodskeyAsBytes, _ := json.Marshal(goodskey)
@@ -227,10 +224,9 @@ func (s *SmartContract) setGoods(APIstub shim.ChaincodeStubInterface, args []str
 	return shim.Success(nil)
 }
 
-// 행사를 새로 추가하는 함수
 func (s *SmartContract) setEvent(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
 	}
 
 	var eventkey = EventKey{}
@@ -255,7 +251,6 @@ func (s *SmartContract) setEvent(APIstub shim.ChaincodeStubInterface, args []str
 	return shim.Success(nil)
 }
 
-// 등록된 상품 트랜젝션의 정부를 원장에서 모두 불러와 반환하는 함수
 func (s *SmartContract) getAllGoods(APIstub shim.ChaincodeStubInterface) pb.Response {
 
 	// Find latestKey
@@ -264,7 +259,7 @@ func (s *SmartContract) getAllGoods(APIstub shim.ChaincodeStubInterface) pb.Resp
 	json.Unmarshal(goodskeyAsBytes, &goodskey)
 	idxStr := strconv.Itoa(goodskey.Idx + 1)
 
-	var startKey = "GS0"
+	var startKey = "GD0"
 	var endKey = goodskey.Key + idxStr
 	fmt.Println(startKey)
 	fmt.Println(endKey)
@@ -302,7 +297,6 @@ func (s *SmartContract) getAllGoods(APIstub shim.ChaincodeStubInterface) pb.Resp
 	return shim.Success(buffer.Bytes())
 }
 
-// 등록된 행사 트랜젝션의 정부를 원장에서 모두 불러와 반환하는 함수
 func (s *SmartContract) getAllEvent(APIstub shim.ChaincodeStubInterface) pb.Response {
 
 	// Find latestKey
