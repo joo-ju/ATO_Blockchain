@@ -1,0 +1,61 @@
+Organizations:
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererOrg
+    MSPDir: crypto-config/ordererOrganizations/ato.com/msp
+
+  - &SellerOrg
+    Name: SellerOrg
+    ID: SellerOrg
+    MSPDir: crypto-config/peerOrganizations/seller.ato.com/msp
+    AnchorPeers:
+      - Host: peer0.seller.ato.com
+        Port: 7051
+
+  - &BuyerOrg
+    Name: BuyerOrg
+    ID: BuyerOrg
+    MSPDir: crypto-config/peerOrganizations/buyer.ato.com/msp
+    AnchorPeers:
+      - Host: peer0.buyer.ato.com
+        Port: 7051
+
+Orderer: &OrdererDefaults
+  OrdererType: kafka
+  Addresses:
+    - orderer1.ato.com:7050
+    - orderer2.ato.com:7050
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Kafka:
+    Brokers:
+      - kafka1.ato.com:9092
+      - kafka2.ato.com:9092
+      - kafka3.ato.com:9092
+      - kafka4.ato.com:9092
+  Organizations:
+
+Application: &ApplicationDefaults
+  Organizations:
+
+Profiles:
+  OrdererGenesis:
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+    Consortiums:
+      SampleConsortium:
+        Organizations:
+          - *SellerOrg
+          - *BuyerOrg
+  Channel1:
+    Consortium: SampleConsortium
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *SellerOrg
+        - *BuyerOrg
