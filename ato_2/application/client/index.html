@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Hyperledger Fabric Goods Application</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" />
+  <script src="https:/ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js" />
+  <style type="text/css">
+    header {
+      background-color: lightgray;
+      font-size: 20px;
+      padding: 20px;
+    }
+
+    header,
+    .form-group {
+      margin-bottom: 3%;
+    }
+
+    .form-group {
+      width: 50%;
+    }
+
+    #body {
+      margin-left: 3%;
+      margin-right: 3%;
+    }
+
+    .form-control {
+      margin: 8px;
+    }
+
+    #right_header {
+      width: 20%;
+      font-size: 15px;
+      margin-right: 0px;
+    }
+
+    #left_header {
+      margin-left: 0;
+      width: 40%;
+      display: inline-block;
+    }
+
+    #id {
+      width: 49%;
+      display: inline-block;
+    }
+
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+</head>
+
+<body ng-app="applicaion" ng-controller="AppCtrl">
+  <header>
+    <div id="left_header">Hyperledger Fabric Ato Goods</div>
+  </header>
+  <div id="body">
+    <div class="form-group">
+      <h5 style="color:green; margin-bottom:2%" id="success_getwallet">
+        {{search_wallet}}
+      </h5>
+      <label>Search Wallet</label>
+      <p>
+        <input class="form-control" type="text" placeholder="Ex: 1Q2W3E4R" ng-model="walletid">
+        <input id="getWalet" type="submit" value="Search" class="btn btn-primary" ng-click="getWallet()">
+      </p>
+    </div>
+    <div class="form-group">
+      <h5 style="color:green; margin-bottom:2%" id="success_getgoods">Success to query</h5>
+      <label>Search Goods</label>
+      <p>
+        <input class="form-control" type="text" placeholder="Ex: MS1" ng-model="goodskey">
+        <input id="getWalet" type="submit" value="Search" class="btn btn-primary" ng-click="getGoods()">
+      </p>
+      <p>
+        <input id="getAllGoods" type="submit" value="Get All Goods" class="btn btn-primary" ng-click="getALlGoods()">
+      </p>
+    </div>
+    <table id="allGoods" class="table" align="center">
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>State</th>
+        <th>Seller</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Content</th>
+        <th>Owner</th>
+        <th>Count</th>
+        <th>Buy</th>
+      </tr>
+      <tr ng-repeat="goods in allGoods">
+        <td>{{goods.Key}}</td>
+        <td>{{goods.title}}</td>
+        <td>{{goods.state}}</td>
+        <td>{{goods.seller}}</td>
+        <td>{{goods.category}}</td>
+        <td>{{goods.price}}</td>
+        <td>{{goods.content}}</td>
+        <td>{{goods.walletid}}</td>
+        <td>{{goods.count}}</td>
+        <td>
+          <input id="purchaseGoods" type="submit" value="구매" ng-click="purchaseGoods(goods.key)">
+        </td>
+      </tr>
+      <h5 style="color:green; margin-bottom:2%" id="success_getallgoods">{{purchase_goods}}</h5>
+    </table>
+    <div class="form-group">
+      <label>Create Music</label>
+      <h5 style="color:green; margin-bottom:2%" id="success_setgoods">{{create_goods}}</h5>
+      <br>
+      Title: <input class="form-control" type="text" placeholder="Ex: Fabric" ng-model="goods.title">
+      State: <input class="form-control" type="text" placeholder="Ex: Sale" ng-model="goods.State">
+      Seller: <input class="form-control" type="text" placeholder="Ex: Hyper" ng-model="goods.seller">
+      Category: <input class="form-control" type="text" placeholder="Ex: Photocard" ng-model="goods.category">
+      Price: <input class="form-control" type="text" placeholder="Ex: 20" ng-model="goods.price">
+      Content: <input class="form-control" type="text" placeholder="Ex: Photocard" ng-model="goods.content">
+      Owner: <input class="form-control" type="text" placeholder="Ex: 5T6Y7U8I" ng-model="goods.walletid">
+      <input id="setGoods" type="submit" value="Create" class="btn btn-primary" ng-click="setGoods()">
+    </div>
+    <div class="form-group">
+      <label>Change Goods Price</label>
+      <h5 style="color:green; margin-bottom:2%;" id="success_changegoodsprice">{{change_goods_price}}</h5>
+      <br>
+      Key: <input class="form-control" type="text" placeholder="Ex: GD0" ng-model="change.goodskey">
+      Price: <input class="form-control" type="text" placeholder="Ex: 10" ng-model="change.price">
+      <input id="changeGoodsPrice" type="submit" value="Change" class="btn btn-primary" ng-click="changeGoodsPrice()">
+    </div>
+    <div class="form-group">
+      <label>DeleteGoods</label>
+      <h5 style="color:green; margin-bottom:2%" id="success_deletegoods">{{delete_goods}}</h5>
+      <p>
+        Key: <input class="form-control" type="text" placeholder="Ex: GD-" ng-model="goodskeydelete">
+        <input id="deleteGoods" type="submit" value="Delete" class="btn btn-primary" ng-click="deleteGoods()">
+      </p>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="app.js"></script>
+
+</html>

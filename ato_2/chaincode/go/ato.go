@@ -239,7 +239,7 @@ func (s *SmartContract) setGoods(APIstub shim.ChaincodeStubInterface, args []str
 	keyidx := strconv.Itoa(goodskey.Idx)
 	fmt.Println("Key : " + goodskey.Key + ", Idx : " + keyidx)
 
-	var goods = Goods{Title: args[0], State: args[1], Seller: args[2], Category: args[3], Price: args[4], Content: args[5], WalletID: args[6]}
+	var goods = Goods{Title: args[0], State: args[1], Seller: args[2], Category: args[3], Price: args[4], Content: args[5], WalletID: args[6], Count: "0"}
 	goodsAsJSONBytes, _ := json.Marshal(goods)
 
 	var keyString = goodskey.Key + keyidx
@@ -330,7 +330,7 @@ func (s *SmartContract) setEvent(APIstub shim.ChaincodeStubInterface, args []str
 	keyidx := strconv.Itoa(eventkey.Idx)
 	fmt.Println("Key : " + eventkey.Key + ", Idx : " + keyidx)
 
-	var event = Event{Name: args[0], Seller: args[1], Category: args[2], Price: args[3], Date: args[4], WalletID: args[5]}
+	var event = Event{Name: args[0], Seller: args[1], Category: args[2], Price: args[3], Date: args[4], WalletID: args[5], Count: "0"}
 	eventAsJSONBytes, _ := json.Marshal(event)
 
 	var keyString = eventkey.Key + keyidx

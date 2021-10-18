@@ -32,7 +32,7 @@
                 "ca.seller.ato.com"
             ],
             "adminPrivateKey": {
-                "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/keystore/6ccd08f6a81ed53dbb3e2c0c8d5d2a203f4dc04c5974102db5be038235291b49_sk"
+                "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/keystore/94d9017986aa4e245d29f6663b948f50bb4cd46c7f5527b619939b3876c6edf7_sk"
             },
             "signedCert":{
                 "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/signcerts/Admin@seller.ato.com-cert.pem"
@@ -40,14 +40,14 @@
         }
     },
     "orderers": {
-        "orderer.ato.com": {
+        "orderer1.ato.com": {
             "url": "grpc://localhost:7050",
             "grpcOptions":{
-                "ssl-target-name-override":"orderer.ato.com",
+                "ssl-target-name-override":"orderer1.ato.com",
                 "grpc-max-send-message-length": -1
             },
             "tlsCACerts": {
-                "path": "../../basic-network/crypto-config/ordererOrganizations/ato.com/orderers/orderer.ato.com/msp/tlscacerts/tlsca.ato.com-cert.pem"
+                "path": "../../basic-network/crypto-config/ordererOrganizations/ato.com/orderers/orderer1.ato.com/msp/tlscacerts/tlsca.ato.com-cert.pem"
             }
         }
     },
