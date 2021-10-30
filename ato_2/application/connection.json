@@ -32,7 +32,7 @@
                 "ca.seller.ato.com"
             ],
             "adminPrivateKey": {
-                "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/keystore/94d9017986aa4e245d29f6663b948f50bb4cd46c7f5527b619939b3876c6edf7_sk"
+                "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/keystore/64bae27559532660f9f9ac486d71ca3f1960d825d30d2b11751eb83e25761403_sk"
             },
             "signedCert":{
                 "path":"../../basic-network/crypto-config/peerOrganizations/seller.ato.com/users/Admin@seller.ato.com/msp/signcerts/Admin@seller.ato.com-cert.pem"

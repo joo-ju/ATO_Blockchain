@@ -13,9 +13,10 @@ import (
 type SmartContract struct{}
 
 type Wallet struct {
-	Name  string `json:"name"`
-	ID    string `json:"id"`
-	Token string `json:"token"`
+	Name    string `json:"name"`
+	ID      string `json:"id"`
+	Token   string `json:"token"`
+	Deleted string `json:"deleted"`
 }
 
 type Goods struct {
@@ -94,8 +95,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) pb.Response 
 func (s *SmartContract) initWallet(APIstub shim.ChaincodeStubInterface) pb.Response {
 
 	//Declare wallets
-	seller := Wallet{Name: "Hyper", ID: "1Q2W3E4R", Token: "100"}
-	buyer := Wallet{Name: "Ledger", ID: "5T6Y7U8I", Token: "200"}
+	seller := Wallet{Name: "Hyper", ID: "1Q2W3E4R", Token: "100", Deleted: "false"}
+	buyer := Wallet{Name: "Ledger", ID: "5T6Y7U8I", Token: "200", Deleted: "false"}
 
 	// Convert seller to []byte
 	SellerasJSONBytes, _ := json.Marshal(seller)
@@ -143,6 +144,11 @@ func (s *SmartContract) getWallet(APIstub shim.ChaincodeStubInterface, args []st
 	buffer.WriteString(", \"Token\":")
 	buffer.WriteString("\"")
 	buffer.WriteString(wallet.Token)
+	buffer.WriteString("\"")
+
+	buffer.WriteString(", \"Deleted\":")
+	buffer.WriteString("\"")
+	buffer.WriteString(wallet.Deleted)
 	buffer.WriteString("\"")
 
 	buffer.WriteString("}")
@@ -215,10 +221,10 @@ func generateEventKey(APIstub shim.ChaincodeStubInterface, key string) []byte {
 
 func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 3 {
-		return shim.Error("Incorrect number of arguments. Expecting 3")
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
-	var wallet = Wallet{Name: args[0], ID: args[1], Token: args[2]}
+	var wallet = Wallet{Name: args[0], ID: args[1], Token: args[2], Deleted: args[3]}
 
 	WalletasJSONBytes, _ := json.Marshal(wallet)
 	err := APIstub.PutState(wallet.ID, WalletasJSONBytes)
@@ -650,8 +656,9 @@ func (s *SmartContract) changeGoodsPrice(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error("Incorrect number of arguments. Expecting 2")
 	}
 
-	goodsbytes, _ := APIstub.GetState(args[0])
-	if goodsbytes != nil {
+	goodsbytes, err := APIstub.GetState(args[0])
+	if err != nil {
+		fmt.Println(err.Error())
 		return shim.Error("Could not locate goods")
 	}
 
@@ -660,11 +667,12 @@ func (s *SmartContract) changeGoodsPrice(APIstub shim.ChaincodeStubInterface, ar
 
 	goods.Price = args[1]
 	goodsbytes, _ = json.Marshal(goods)
-	err := APIstub.PutState(args[0], goodsbytes)
+	err2 := APIstub.PutState(args[0], goodsbytes)
 
-	if err != nil {
-		return shim.Error(fmt.Sprintf("Failed to change goods holder: %s", args[0]))
+	if err2 != nil {
+		return shim.Error(fmt.Sprintf("Failed to change goods price: %s", args[0]))
 	}
+
 	return shim.Success(nil)
 }
 

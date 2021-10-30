@@ -8,7 +8,7 @@ docker-compose -f docker-compose-ca.yaml kill && docker-compose -f docker-compos
 docker-compose -f kill && docker-compose down --volumes --remove-orphans
 
 # remove the local state
-rm -rf $GOPATH/src/ato_2/application/wallet/
+rm -rf $GOPATH/src/ato/ato_2/application/wallet/
 
 # Your system is now clean
 docker stop $(docker ps -a -q)

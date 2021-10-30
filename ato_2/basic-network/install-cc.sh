@@ -31,4 +31,4 @@ docker exec cli peer chaincode query -o orderer1.ato.com:7050 -C channelseller -
 sleep 1
 
 # query chaincode for channelseller
-docker exec cli peer chaincode query -o orderer.ato.com:7050 -C channelseller -n ato-cc-2 -c '{"function":"getAllGoods","Args":[""]}'
+docker exec cli peer chaincode query -o orderer1.ato.com:7050 -C channelseller -n ato-cc-2 -c '{"function":"getAllGoods","Args":[""]}'

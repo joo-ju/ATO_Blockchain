@@ -5,8 +5,8 @@
   <title>Hyperledger Fabric Goods Application</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" />
-  <script src="https:/ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
   <style type="text/css">
     header {
       background-color: lightgray;
@@ -68,30 +68,25 @@
   </style>
 </head>
 
-<body ng-app="applicaion" ng-controller="AppCtrl">
+<body ng-app="application" ng-controller="AppCtrl">
   <header>
     <div id="left_header">Hyperledger Fabric Ato Goods</div>
   </header>
   <div id="body">
     <div class="form-group">
-      <h5 style="color:green; margin-bottom:2%" id="success_getwallet">
-        {{search_wallet}}
-      </h5>
+      <h5 style="color:green;margin-bottom:2%" id="success_getwallet">{{search_wallet}}</h5>
       <label>Search Wallet</label>
-      <p>
-        <input class="form-control" type="text" placeholder="Ex: 1Q2W3E4R" ng-model="walletid">
-        <input id="getWalet" type="submit" value="Search" class="btn btn-primary" ng-click="getWallet()">
+      <p><input class="form-control" type="text" placeholder="Ex: 1Q2W3E4R" ng-model="walletid">
+        <input id="getWallet" type="submit" value="Search" class="btn btn-primary" ng-click="getWallet()">
       </p>
     </div>
     <div class="form-group">
-      <h5 style="color:green; margin-bottom:2%" id="success_getgoods">Success to query</h5>
+      <h5 style="color:green;margin-bottom:2%" id="success_getgoods">Success to query</h5>
       <label>Search Goods</label>
-      <p>
-        <input class="form-control" type="text" placeholder="Ex: MS1" ng-model="goodskey">
-        <input id="getWalet" type="submit" value="Search" class="btn btn-primary" ng-click="getGoods()">
+      <p><input class="form-control" type="text" placeholder="Ex: GD1" ng-model="goodskey">
+        <input id="getGoods" type="submit" value="Search" class="btn btn-primary" ng-click="getGoods()">
       </p>
-      <p>
-        <input id="getAllGoods" type="submit" value="Get All Goods" class="btn btn-primary" ng-click="getALlGoods()">
+      <p><input id="getAllGoods" type="submit" value="Get all goods" class="btn btn-primary" ng-click="getAllGoods()">
       </p>
     </div>
     <table id="allGoods" class="table" align="center">
@@ -117,43 +112,41 @@
         <td>{{goods.content}}</td>
         <td>{{goods.walletid}}</td>
         <td>{{goods.count}}</td>
-        <td>
-          <input id="purchaseGoods" type="submit" value="구매" ng-click="purchaseGoods(goods.key)">
-        </td>
+        <td><input id="purchaseGoods" type="submit" value="구매" ng-click="purchaseGoods(goods.Key)"></td>
       </tr>
-      <h5 style="color:green; margin-bottom:2%" id="success_getallgoods">{{purchase_goods}}</h5>
+      <h5 style="color:green;margin-bottom:2%" id="success_getallgoods">{{purchase_goods}}</h5>
     </table>
     <div class="form-group">
-      <label>Create Music</label>
-      <h5 style="color:green; margin-bottom:2%" id="success_setgoods">{{create_goods}}</h5>
+      <label>Create Goods</label>
+      <h5 style="color:green;margin-bottom:2%" id="success_setgoods">{{create_goods}}</h5>
       <br>
       Title: <input class="form-control" type="text" placeholder="Ex: Fabric" ng-model="goods.title">
-      State: <input class="form-control" type="text" placeholder="Ex: Sale" ng-model="goods.State">
-      Seller: <input class="form-control" type="text" placeholder="Ex: Hyper" ng-model="goods.seller">
+      State: <input class="form-control" type="text" placeholder="Ex: Sale" ng-model="goods.seller">
+      Seller: <input class="form-control" type="text" placeholder="Ex: Hyper" ng-model="goods.state">
       Category: <input class="form-control" type="text" placeholder="Ex: Photocard" ng-model="goods.category">
       Price: <input class="form-control" type="text" placeholder="Ex: 20" ng-model="goods.price">
-      Content: <input class="form-control" type="text" placeholder="Ex: Photocard" ng-model="goods.content">
+      Content: <input class="form-control" type="text" placeholder="Ex: NCT Photocard" ng-model="goods.content">
       Owner: <input class="form-control" type="text" placeholder="Ex: 5T6Y7U8I" ng-model="goods.walletid">
       <input id="setGoods" type="submit" value="Create" class="btn btn-primary" ng-click="setGoods()">
     </div>
     <div class="form-group">
       <label>Change Goods Price</label>
-      <h5 style="color:green; margin-bottom:2%;" id="success_changegoodsprice">{{change_goods_price}}</h5>
+      <h5 style="color:green;margin-bottom:2%" id="success_changegoodsprice">{{change_goods_price}}</h5>
       <br>
       Key: <input class="form-control" type="text" placeholder="Ex: GD0" ng-model="change.goodskey">
-      Price: <input class="form-control" type="text" placeholder="Ex: 10" ng-model="change.price">
+      Price<input class="form-control" type="text" placeholder="Ex: 10" ng-model="change.price">
       <input id="changeGoodsPrice" type="submit" value="Change" class="btn btn-primary" ng-click="changeGoodsPrice()">
     </div>
     <div class="form-group">
       <label>DeleteGoods</label>
-      <h5 style="color:green; margin-bottom:2%" id="success_deletegoods">{{delete_goods}}</h5>
+      <h5 style="color:green;margin-bottom:2%" id="success_deletegoods">{{delete_goods}}</h5>
       <p>
-        Key: <input class="form-control" type="text" placeholder="Ex: GD-" ng-model="goodskeydelete">
+        Key: <input class="form-control" type="text" placeholder="Ex: GD0" ng-model="goodskeydelete">
         <input id="deleteGoods" type="submit" value="Delete" class="btn btn-primary" ng-click="deleteGoods()">
       </p>
     </div>
   </div>
 </body>
-<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="app.js"> </script>
 
 </html>

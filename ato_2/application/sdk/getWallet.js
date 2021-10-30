@@ -29,7 +29,7 @@ async function main() {
 
     const network = await gateway.getNetwork("channelseller");
 
-    const contract = network.getContract("ato-cc");
+    const contract = network.getContract("ato-cc-2");
 
     var walletid = process.argv[2];
 
