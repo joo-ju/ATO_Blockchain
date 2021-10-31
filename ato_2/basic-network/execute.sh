@@ -9,3 +9,6 @@ bash install-cc.sh
 sleep 1
 
 bash start-ca.sh
+
+cd ../application/server
+node server.js

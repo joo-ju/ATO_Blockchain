@@ -11,8 +11,7 @@ module.exports = function(app){
     var name = req.query.name;
 		var id = req.query.id;
     var coin = req.query.coin;
-    var isdeleted = req.query.isdeleted;
-    let args = [name, id, coin, isdeleted];
+    let args = [name, id, coin];
     sdk.send(true, 'setWallet', args, res);
   });
 

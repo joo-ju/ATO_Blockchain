@@ -13,10 +13,9 @@ import (
 type SmartContract struct{}
 
 type Wallet struct {
-	Name    string `json:"name"`
-	ID      string `json:"id"`
-	Token   string `json:"token"`
-	Deleted string `json:"deleted"`
+	Name  string `json:"name"`
+	ID    string `json:"id"`
+	Token string `json:"token"`
 }
 
 type Goods struct {
@@ -61,6 +60,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) pb.Response 
 		return s.initWallet(APIstub)
 	} else if function == "getWallet" {
 		return s.getWallet(APIstub, args)
+		// } else if function == "getAllWallet" {
+		// 	return s.getAllWallet(APIstub, args)
 	} else if function == "setWallet" {
 		return s.setWallet(APIstub, args)
 	} else if function == "getGoods" {
@@ -95,8 +96,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) pb.Response 
 func (s *SmartContract) initWallet(APIstub shim.ChaincodeStubInterface) pb.Response {
 
 	//Declare wallets
-	seller := Wallet{Name: "Hyper", ID: "1Q2W3E4R", Token: "100", Deleted: "false"}
-	buyer := Wallet{Name: "Ledger", ID: "5T6Y7U8I", Token: "200", Deleted: "false"}
+	seller := Wallet{Name: "Hyper", ID: "1Q2W3E4R", Token: "100"}
+	buyer := Wallet{Name: "Ledger", ID: "5T6Y7U8I", Token: "200"}
 
 	// Convert seller to []byte
 	SellerasJSONBytes, _ := json.Marshal(seller)
@@ -146,11 +147,6 @@ func (s *SmartContract) getWallet(APIstub shim.ChaincodeStubInterface, args []st
 	buffer.WriteString(wallet.Token)
 	buffer.WriteString("\"")
 
-	buffer.WriteString(", \"Deleted\":")
-	buffer.WriteString("\"")
-	buffer.WriteString(wallet.Deleted)
-	buffer.WriteString("\"")
-
 	buffer.WriteString("}")
 	bArrayMemberAlreadyWritten = true
 	buffer.WriteString("]\n")
@@ -158,6 +154,52 @@ func (s *SmartContract) getWallet(APIstub shim.ChaincodeStubInterface, args []st
 	return shim.Success(buffer.Bytes())
 
 }
+
+// func (s *SmartContract) getAllWallet(APIstub shim.ChaincodeStubInterface) pb.Response {
+
+// 	// Find latestKey
+
+// 	walletAsBytes, err := APIstub.GetState("latestKey")
+// 	if err != nil {
+// 		fmt.Println(err.Error())
+// 	}
+
+// 	wallet := Wallet{}
+// 	json.Unmarshal(walletAsBytes, &wallet)
+// 	idxStr := strconv.Itoa(wallet.Idx + 1)
+
+// 	var buffer bytes.Buffer
+// 	buffer.WriteString("[")
+// 	bArrayMemberAlreadyWritten := false
+// 	for resultsIter.HasNext() {
+
+// 		if bArrayMemberAlreadyWritten == true {
+// 			buffer.WriteString(",")
+// 		}
+// 		buffer.WriteString("{\"Name\":")
+// 		buffer.WriteString("\"")
+// 		buffer.WriteString(wallet.Name)
+// 		buffer.WriteString("\"")
+
+// 		buffer.WriteString(", \"ID\":")
+// 		buffer.WriteString("\"")
+// 		buffer.WriteString(wallet.ID)
+// 		buffer.WriteString("\"")
+
+// 		buffer.WriteString(", \"Token\":")
+// 		buffer.WriteString("\"")
+// 		buffer.WriteString(wallet.Token)
+// 		buffer.WriteString("\"")
+
+// 		buffer.WriteString("}")
+// 		bArrayMemberAlreadyWritten = true
+// 		buffer.WriteString("]\n")
+
+// 		return shim.Success(buffer.Bytes())
+// 	}
+// 	buffer.WriteString("]\n")
+// 	return shim.Success(buffer.Bytes())
+// }
 
 func generateGoodsKey(APIstub shim.ChaincodeStubInterface, key string) []byte {
 
@@ -221,10 +263,10 @@ func generateEventKey(APIstub shim.ChaincodeStubInterface, key string) []byte {
 
 func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 3 {
+		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
-	var wallet = Wallet{Name: args[0], ID: args[1], Token: args[2], Deleted: args[3]}
+	var wallet = Wallet{Name: args[0], ID: args[1], Token: args[2]}
 
 	WalletasJSONBytes, _ := json.Marshal(wallet)
 	err := APIstub.PutState(wallet.ID, WalletasJSONBytes)
